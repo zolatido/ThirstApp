@@ -1,68 +1,65 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, ImageBackground, TextInput, TouchableOpacity, Image } from 'react-native';
-import {useFonts} from 'expo-font';
+import { View, Text, Image, TouchableOpacity, ScrollView, ImageBackground, StyleSheet } from 'react-native';
 
+export default function Dashboard() {
+  const dailyGoal = 2000; // Set your daily water consumption goal in milliliters
+  const increment = 250; // Amount to add on each click
 
+  const [consumedWater, setConsumedWater] = useState(0);
+  const [message, setMessage] = useState(null);
+  const [consumptionHistory, setConsumptionHistory] = useState([]); // Array to store consumption records
+  const [meterFill, setMeterFill] = useState(0); // Fill percentage of the circular meter
 
+  const addWater = () => {
+    const newConsumedWater = consumedWater + increment;
 
-export default function Dashboard({navigation}) {
-  const [courseGoals, setCourseGoals] = useState([]);
-  const [enteredGoalText, setEnteredGoalText] = useState('');
+    // Calculate meter fill percentage based on the consumption percentage
+    const newMeterFill = Math.min((newConsumedWater / dailyGoal) * 100, 100);
+    setMeterFill(newMeterFill);
 
-  function addGoalHandler() {
-    setCourseGoals((currentCourseGoals) => [
-      ...currentCourseGoals,
-      { text: enteredGoalText, key: Math.random().toString() },
-    ]);
-    // Clear the input field
-    setEnteredGoalText('');
-  }
+    // Add the consumption record to the history
+    const timestamp = new Date().toLocaleTimeString();
+    const record = `${timestamp}: +${increment}ml`;
+    consumptionHistory.unshift(record); // Add the new record at the beginning of the array
+
+    // Show the message
+    setMessage('Good Job +250ml');
+
+    // Hide the message after 0.5 seconds
+    setTimeout(() => {
+      setMessage(null);
+    }, 500);
+
+    setConsumedWater(newConsumedWater);
+  };
 
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require('/Users/Sanchez/Desktop/superlight.png')}
+        source={require('/Users/Sanchez/Desktop/superlight.jpg')}
         style={styles.backgroundImage}
       >
-        <View style={styles.overlay}>
-          <View style={styles.appContainer}>
-            <View style={styles.headerContainer}>
-          
-         
-            <Image 
-              source = {require('/Users/Sanchez/Desktop/chugchug.gif')}
-              style = {styles.logo} >
-
-              </Image>
-
+        <View style={styles.appContainer}>
+          <Text style={styles.header}>Water Consumption Dashboard</Text>
+          <View style={styles.meterContainer}>
+            <View style={styles.meter}>
+              <View style={[styles.fill, { height: `${meterFill}%` }]} />
             </View>
-          
-          <View style={styles.appContainer}>
-            
-          
-
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={() => navigation.navigate('Registration')}
-            >
-              <Text style={styles.addButtonLabel}>Get Started</Text>
-              
-            </TouchableOpacity>
           </View>
+          <Text style={styles.consumedText}>{consumedWater} ml</Text>
+          <Text style={styles.goalText}>Goal: {dailyGoal} ml</Text>
+          <TouchableOpacity onPress={addWater}>
+            <Image source={require('/Users/Sanchez/Desktop/bottle.png')} style={styles.touchableWaterBottle} />
+          </TouchableOpacity>
+          {message && <Text style={styles.messageText}>{message}</Text>}
 
-
-
-          <View style={styles.goalListContainer}>
-            <FlatList
-              data={courseGoals}
-              renderItem={(itemData) => (
-                <View style={styles.goalItems}>
-                  <Text style={styles.goalText}>{itemData.item.text}</Text>
-                </View>
-              )}
-            />
-          </View>
-        </View>
+          <ScrollView style={styles.historyContainer}>
+            {consumptionHistory.map((record, index) => (
+              <View key={index} style={styles.historyRecord}>
+                <Text style={styles.historyText}>{record}</Text>
+              </View>
+            ))}
+          </ScrollView>
         </View>
       </ImageBackground>
     </View>
@@ -73,126 +70,69 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
   },
-
   appContainer: {
     flex: 1,
-    paddingTop: 50,
-    paddingBottom: 50,
-    paddingHorizontal: 16,
     alignItems: 'center',
-    
+    justifyContent: 'center',
   },
-  headerContainer: {
+  header: {
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  meterContainer: {
+    height: 300,
+    width: 300,
     alignItems: 'center',
-    marginTop: 20,
+    justifyContent: 'center',
   },
-
-
-  //baboy na umiinom
-  logo: {
-    height: 170, // size nung logo
-    width:170, // size nung loge
-    top: 60,
-    alignItems: 'center',
-    
+  meter: {
+    width: 200,
+    height: 200,
+    backgroundColor: 'lightgray', // Meter background color
+    borderRadius: 100, // Make it a circle
+    overflow: 'hidden', // Hide overflow for the fill
   },
- 
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: "white",
+  fill: {
+    width: '100%',
+    backgroundColor: 'blue', // Color of the fill
+    position: 'absolute',
+    bottom: 0, // Fill from the bottom
   },
-  
-  //(HOME)Welcome to hydrate4Today
-  headerMotto: {
-    fontSize: 50,
-    fontWeight:800,
-    color: "white",
-    top: 55,
-    
-  },
-
-  //(HOME)started
-  headerMotto2: {
-    fontSize: 24,
-    fontWeight: 650,
-    color: "white",
-    top: 50,
-  },
-
-  //Stay hydrated
-  headerMotto3: {
-    fontSize: 15,
-    color: "white",
-    top: 80,
-    fontFamily: 'ShadowsIntoLight-Regular',
-    
-  },
-
-  inputContainer: {
-    
-    alignItems: 'center',
-    marginBottom: 75,
-  },
-
-  //user input
-  textInput: {
-    flex: 1,
-    marginRight: 10,
-    borderBottomWidth: 1,
-    borderColor: 'black',
-    paddingVertical: 4,
-    paddingHorizontal: 2,
-  },
-
-  //get started button
-  addButton: {
-    backgroundColor: '#A3D7E7', // Creamy aesthetic color
-    
-    paddingVertical: 23,
-    paddingHorizontal: 70,
-    borderRadius: 10,
-    bottom: -150,
-    alignItems:'center',
-    
-  },
-
-  //text sa button
-  addButtonLabel: {
-    fontSize: 23,
-    color: '#333', // Text color
-    fontWeight: 'bold',
-    
-  },
-
-
-  headerLabel: {
-    fontSize: 30,
-    color: 'white', // Text color
-  },
-
-
-  goalListContainer: {
-    marginTop: 20,
-    
-  },
-  goalItems: {
-    backgroundColor: 'white',
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 5,
+  consumedText: {
+    fontSize: 18,
+    marginTop: 10,
   },
   goalText: {
+    fontSize: 16,
+    marginTop: 10,
+  },
+  touchableWaterBottle: {
+    width: 80,
+    height: 160,
+    marginTop: 20,
+  },
+  messageText: {
     fontSize: 18,
+    color: 'green',
+    marginTop: 10,
+  },
+  historyContainer: {
+    maxHeight: 200,
+    width: 230,
+    marginTop: 20,
+    borderWidth: 1,
+    padding: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Aesthetic background color with transparency
+    borderRadius: 10,
+  },
+  historyRecord: {
+    marginBottom: 10,
+  },
+  historyText: {
+    fontSize: 16,
   },
 });

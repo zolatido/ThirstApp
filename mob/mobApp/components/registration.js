@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, FlatList, ImageBackground, TextInput, TouchableOpacity, Image } from 'react-native';
 
-export default function Dashboard({navigation}) {
+export default function Reminder({navigation}) {
   const [courseGoals, setCourseGoals] = useState([]);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -65,7 +65,7 @@ export default function Dashboard({navigation}) {
 
         <TouchableOpacity
               style={styles.addButton}
-              onPress={() => navigation.navigate('Dashboard')}
+              onPress={() => navigation.navigate('Reminder')}
             >
               <Text style={styles.addButtonLabel}>Get Started</Text>
               

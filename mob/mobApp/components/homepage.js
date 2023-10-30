@@ -5,7 +5,7 @@ import {useFonts} from 'expo-font';
 
 
 
-export default function Registration({navigation}) {
+export default function Goals({navigation}) {
   const [courseGoals, setCourseGoals] = useState([]);
   const [enteredGoalText, setEnteredGoalText] = useState('');
 
@@ -30,7 +30,7 @@ export default function Registration({navigation}) {
           
          
             <Image 
-              source = {require('/Users/Sanchez/Desktop/logotrans.png')}
+              source = {require('/Users/Sanchez/Desktop/logodrink.png')}
               style = {styles.logo} >
 
               </Image>
@@ -40,13 +40,13 @@ export default function Registration({navigation}) {
           <View style={styles.appContainer}>
             
             <Text style ={styles.headerMotto2}>Hydrate Your Way to Health!</Text>
-            <Text style ={styles.headerMotto3}>"UMINOM KA NG TUBIG PARA</Text>
-            <Text style ={styles.headerMotto3}>PUYAT KA NA LANG PERO HYDRATED"</Text>
+            <Text style ={styles.headerMotto3}>Drinking tubig kasi </Text>
+            <Text style ={styles.headerMotto3}>di na muling iibig 🥹</Text>
             <Text style ={styles.headerMotto3}>-Arwen 2023</Text>
 
             <TouchableOpacity
               style={styles.addButton}
-              onPress={() => navigation.navigate('Registration')}
+              onPress={() => navigation.navigate('Goals')}
             >
               <Text style={styles.addButtonLabel}>Get Started</Text>
               
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   headerMotto: {
     fontSize: 50,
     fontWeight:800,
-    color: "white",
+    color: "black",
     top: 55,
     
   },
@@ -130,14 +130,14 @@ const styles = StyleSheet.create({
   headerMotto2: {
     fontSize: 24,
     fontWeight: 650,
-    color: "white",
+    color: "black",
     top: 50,
   },
 
   //Stay hydrated
   headerMotto3: {
     fontSize: 15,
-    color: "white",
+    color: "black",
     top: 80,
     fontFamily: 'ShadowsIntoLight-Regular',
     
